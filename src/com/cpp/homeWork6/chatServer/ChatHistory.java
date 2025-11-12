@@ -1,13 +1,18 @@
 package com.cpp.homeWork6.chatServer;
 
-import java.util.ArrayList;
+import com.cpp.homeWork6.iterator.IterableByUser;
+import com.cpp.homeWork6.iterator.SearchMessagesByUser;
 
-public class ChatHistory {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
+public class ChatHistory implements IterableByUser {
     private final ArrayList<Message> sentMessages;
     private final ArrayList<Message> receivedMessages;
 
     public ChatHistory() {
-        this.sentMessages = new ArrayList<Message>();
+        this.sentMessages = new ArrayList<>();
         this.receivedMessages = new ArrayList<>();
     }
 
@@ -33,5 +38,13 @@ public class ChatHistory {
 
     public ArrayList<Message> getReceivedMessages() {
         return this.receivedMessages;
+    }
+
+    @Override
+    public Iterator<Message> iterator(User userToSearchWith) {
+        if (userToSearchWith == null) {
+            return Collections.emptyIterator();
+        }
+        return new SearchMessagesByUser(this, userToSearchWith);
     }
 }

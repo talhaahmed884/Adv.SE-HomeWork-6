@@ -96,4 +96,8 @@ public class ChatServer {
     public void unblockUser(String userID, String targetUserID) {
         blockedList.get(userID).remove(targetUserID);
     }
+
+    public ChatHistory getChatHistory(String userID) {
+        return messages.get(userID);
+    }
 }
