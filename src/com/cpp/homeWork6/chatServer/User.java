@@ -1,8 +1,11 @@
 package com.cpp.homeWork6.chatServer;
 
+import com.cpp.homeWork6.iterator.IterableByUser;
+
+import java.util.Iterator;
 import java.util.UUID;
 
-public class User {
+public class User implements IterableByUser {
     private final String name;
     private final String id;
     private final ChatServer chatServer;
@@ -50,5 +53,10 @@ public class User {
 
     public void unblockUser(String userID) {
         chatServer.unblockUser(id, userID);
+    }
+
+    @Override
+    public Iterator<Message> iterator(User userToSearchWith) {
+        return this.chatServer.getChatHistory(this.id).iterator(userToSearchWith);
     }
 }
