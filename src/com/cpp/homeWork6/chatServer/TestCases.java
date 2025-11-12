@@ -3,6 +3,8 @@ package com.cpp.homeWork6.chatServer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Iterator;
+
 public class TestCases {
     @Test
     public void TestChatServerSimpleConversation() {
@@ -66,5 +68,32 @@ public class TestCases {
         chatServer.unregisterUser(user2.getId());
         Assertions.assertNull(chatServer.getChatHistory(user1.getId()));
         Assertions.assertNull(chatServer.getChatHistory(user2.getId()));
+    }
+
+    @Test
+    public void TestChatSeverIterator() throws InterruptedException {
+        ChatServer chatServer = new ChatServer();
+
+        User user1 = new User("User-1", chatServer);
+        User user2 = new User("User-2", chatServer);
+
+        chatServer.registerUser(user1.getId());
+        chatServer.registerUser(user2.getId());
+
+        user1.sendMessage("Hello Dear!!", user2);
+        Thread.sleep(10);
+        user2.sendMessage("Hi, I am good. How are you??", user1);
+        Thread.sleep(10);
+        user1.sendMessage("Hello Dear!!", user2);
+        Thread.sleep(10);
+        user2.sendMessage("Hi, I am good. How are you??", user1);
+
+        Iterator<Message> messages = user1.iterator(user2);
+        Assertions.assertTrue(messages.hasNext());
+        Assertions.assertEquals("Hello Dear!!", messages.next().getMessage());
+        Assertions.assertEquals("Hi, I am good. How are you??", messages.next().getMessage());
+        Assertions.assertEquals("Hello Dear!!", messages.next().getMessage());
+        Assertions.assertEquals("Hi, I am good. How are you??", messages.next().getMessage());
+        Assertions.assertFalse(messages.hasNext());
     }
 }
