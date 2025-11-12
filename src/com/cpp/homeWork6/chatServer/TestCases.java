@@ -45,4 +45,26 @@ public class TestCases {
         Assertions.assertEquals(1, chatServer.getChatHistory(user1.getId()).getReceivedMessages().size());
         Assertions.assertEquals(1, chatServer.getChatHistory(user1.getId()).getSentMessages().size());
     }
+
+    @Test
+    public void TestChatServerUnRegisterUser() {
+        ChatServer chatServer = new ChatServer();
+
+        User user1 = new User("User-1", chatServer);
+        User user2 = new User("User-2", chatServer);
+
+        chatServer.registerUser(user1.getId());
+        chatServer.registerUser(user2.getId());
+
+        user1.sendMessage("Hello Dear!!", user2);
+        user2.sendMessage("Hi, I am good. How are you??", user1);
+
+        Assertions.assertEquals("Hello Dear!!", chatServer.getChatHistory(user1.getId()).getSentMessages().getFirst().getMessage());
+        Assertions.assertEquals("Hi, I am good. How are you??", chatServer.getChatHistory(user2.getId()).getSentMessages().getFirst().getMessage());
+
+        chatServer.unregisterUser(user1.getId());
+        chatServer.unregisterUser(user2.getId());
+        Assertions.assertNull(chatServer.getChatHistory(user1.getId()));
+        Assertions.assertNull(chatServer.getChatHistory(user2.getId()));
+    }
 }
